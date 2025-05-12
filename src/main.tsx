@@ -1,5 +1,6 @@
 import ReactDOM from 'react-dom/client'
 import './styles/index.css'
+import './styles/animations.css'
 import './styles/variables.css'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './router'

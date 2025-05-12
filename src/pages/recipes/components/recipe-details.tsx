@@ -1,0 +1,73 @@
+import { useSearchParams, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Clock, BarChart, Star } from "lucide-react";
+import MOCKED_RECIPES from "@/assets/receitas.json";
+import { PageHeader } from "@/components/ui/page-header";
+import { TRecipe } from "../@types/recipe";
+
+
+export function RecipeDetails() {
+    const navigate = useNavigate();
+    const pathParams = useParams()
+    const recipeId = pathParams.recipeId as string;
+    const recipe = Object.values(MOCKED_RECIPES).flat().find((r) => r.id === recipeId) as TRecipe; 
+
+    if (!recipeId || !recipe ) return
+
+    return (
+        <div className="flex flex-col min-h-screen bg-white">
+            <PageHeader
+                title={recipe.name}
+                className="pb-3"
+                description={"Veja os detalhes da receita"}
+            />
+            <div className="bg-primary text-primary-foreground px-6 pb-6  flex flex-col gap-2">
+                <div className="flex justify-between items-center text-sm">
+                    <div className="flex gap-3 text-gray-800">
+                        <span className="flex items-center gap-1 font-medium">
+                            <Clock size={16} /> {recipe.time}
+                        </span>
+                        <span className="flex items-center gap-1 font-medium">
+                            <BarChart size={16} /> {recipe.difficulty}
+                        </span>
+                    </div>
+                </div>
+
+                <div className="flex gap-1 items-center">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                        <Star
+                            key={i}
+                            size={16}
+                            className={i < recipe.rating ? "fill-yellow-400 stroke-yellow-400" : "text-gray-300"}
+                        />
+                    ))}
+
+                    <button
+                        className="bg-white text-[#1f3a2c] px-3 py-1 rounded-full text-xs font-semibold ml-auto"
+                        onClick={() => navigate(`./feedbacks`, { relative: "path" })}
+                    >
+                        Ver Feedbacks
+                    </button>
+                </div>
+            </div>
+
+            <div className="p-6 space-y-4">
+                <div>
+                    <h2 className="font-bold text-[#1f3a2c] text-lg">Ingredientes</h2>
+                    <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+                        {recipe.ingredients.map((item, i) => (
+                            <li key={i}>{item}</li>
+                        ))}
+                    </ul>
+                </div>
+
+                <div>
+                    <h2 className="font-bold text-[#1f3a2c] text-lg">Modo de Preparo</h2>
+                    <p className="text-sm text-gray-700 whitespace-pre-line">
+                        {recipe.preparation}
+                    </p>
+                </div>
+            </div>
+        </div>
+    );
+}

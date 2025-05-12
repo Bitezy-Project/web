@@ -1,0 +1,15 @@
+{
+    "breakfast": [
+        {
+            "id": "1",
+            "name": "Panqueca",
+            "image": "https://picsum.photos/seed/panqueca/200/200",
+            "time": "20 min",
+            "difficulty": "Fácil",
+            "rating": 4,
+            "ingredients": ["2 ovos", "1 banana", "1 colher de aveia"],
+            "preparation": "Misture os ingredientes e frite em fogo médio."
+        }
+    ]
+    
+}
