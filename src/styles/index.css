@@ -1,0 +1,22 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: "Geist";
+    scroll-behavior: smooth;
+}
+
+html {
+    height: 100%;
+    overflow-y: auto;
+}
+
+body {
+    height: 100vh;
+    width: 100%;
+    background-color: black;
+}
+
+#root {
+    height: 100%;
+}
