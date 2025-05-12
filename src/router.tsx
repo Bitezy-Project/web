@@ -4,7 +4,7 @@ import { Home } from "./pages/home/home";
 import { Educational } from "./pages/educational/educational";
 import { Products } from "./pages/products/products";
 import { Recipes } from "./pages/recipes/recipes";
-import { Locations } from "./pages/locais/locais";
+import { Locations } from "./pages/locations/locations";
 
 
 export const router = createBrowserRouter([

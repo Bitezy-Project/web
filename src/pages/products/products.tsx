@@ -9,7 +9,7 @@ export function Products() {
     const navigate = useNavigate();
 
     return (
-        <div className="flex flex-col min-h-screen bg-white gap-4">
+        <div className="flex flex-col min-h-screen bg-white ">
             <PageHeader
                 title="Sugestão de Produtos"
                 description={"Aqui você encontra sugestões de produtos seguros para o seu consumo."}
@@ -18,7 +18,7 @@ export function Products() {
             <div className="flex flex-col gap-4 p-6">
                 <SearchBar placeholder="Pesquise algum tópico" />
 
-                <div className="grid grid-cols-2 gap-2 p-6">
+                <div className="grid grid-cols-2 gap-2">
                     <CardButton className="py-2" label="Café da Manhã" onClick={() => navigate("/lista_produtos?categoria=cafe-da-manha")} />
                     <CardButton className="py-2" label="Almoço" onClick={() => navigate("/lista_produtos?categoria=almoco")} />
                     <CardButton className="py-2" label="Jantar" onClick={() => navigate("/lista_produtos?categoria=jantar")} />

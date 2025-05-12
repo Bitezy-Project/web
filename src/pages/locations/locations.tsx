@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { SearchBar } from "@/components/ui/search-bar";
 
 import pinVerde from "@/assets/pinIcon.png";
+import { PageHeader } from "@/components/ui/page-header";
 
 const markerIcon = new Icon({
     iconUrl: pinVerde,
@@ -21,9 +22,13 @@ const locaisMock = [
 export function Locations() {
     return (
         <div className="flex flex-col bg-white min-h-screen">
-            <SearchBar placeholder="Digite aqui..." />
+            <PageHeader
+                title="Localizações"
+                description="Encontre os melhores locais para visitar."
+            />
+            <div className="flex flex-col gap-4 p-6">
+                <SearchBar placeholder="Digite aqui..." />
 
-            <div className="p-6">
                 <MapContainer
                     center={[-23.561414, -46.655881]}
                     zoom={15}
@@ -39,11 +44,11 @@ export function Locations() {
                         </Marker>
                     ))}
                 </MapContainer>
-            </div>
 
-            <Card className="bg-[#e6e6e6] m-8 text-[#1f3d2b] text-center font-semibold">
-                Pesquise por nome de locais, regiões, tipo de restaurantes, etc.
-            </Card>
+                <Card className="bg-[#e6e6e6] mt-2 p-4 py-3 text-[#1f3d2b] text-center font-semibold">
+                    Pesquise por nome de locais, regiões, tipo de restaurantes, etc.
+                </Card>
+            </div>
         </div>
     );
 }
