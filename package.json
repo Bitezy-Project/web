@@ -12,6 +12,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@clerk/clerk-react": "^5.31.2",
     "@phosphor-icons/react": "^2.1.7",
     "@radix-ui/react-label": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.2",
