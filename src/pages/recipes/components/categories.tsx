@@ -8,13 +8,13 @@ export function RecipesCategories() {
     const navigate = useNavigate();
 
     return (
-        <div className="flex flex-col  bg-white min-h-screen fade">
+        <div className="flex flex-col  bg-white min-h-screen ">
             <PageHeader
                 title="Categorias"
                 description={"Escolha uma categoria para ver as receitas"}
             />
 
-            <div className="flex flex-col gap-4 p-6">
+            <div className="flex flex-col gap-4 p-6 fade">
                 <SearchBar placeholder="Pesquise algum tópico" />
 
                 <div className="grid grid-cols-2 gap-2 ">

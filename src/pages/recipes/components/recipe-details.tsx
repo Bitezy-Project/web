@@ -15,7 +15,7 @@ export function RecipeDetails() {
     if (!recipeId || !recipe ) return
 
     return (
-        <div className="flex flex-col min-h-screen bg-white">
+        <div className="flex flex-col min-h-screen bg-white fade">
             <PageHeader
                 title={recipe.name}
                 className="pb-3"

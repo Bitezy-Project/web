@@ -15,7 +15,7 @@ export function Products() {
                 description={"Aqui você encontra sugestões de produtos seguros para o seu consumo."}
             />
 
-            <div className="flex flex-col gap-4 p-6">
+            <div className="flex flex-col gap-4 p-6 fade">
                 <SearchBar placeholder="Pesquise algum tópico" />
 
                 <div className="grid grid-cols-2 gap-2">

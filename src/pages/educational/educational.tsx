@@ -21,12 +21,12 @@ export function Educational() {
     }, []);
 
     return (
-        <div className="flex flex-col bg-white min-h-screen fade">
+        <div className="flex flex-col bg-white min-h-screen">
             <PageHeader
                 title="Localizações"
                 description="Encontre os melhores locais para visitar."
             />
-            <div className="flex flex-col gap-4 p-6">
+            <div className="flex flex-col gap-4 p-6 fade">
                 <SearchBar placeholder="Pesquise algum tópico" />
 
                 <div className="flex flex-col gap-4 pb-10">

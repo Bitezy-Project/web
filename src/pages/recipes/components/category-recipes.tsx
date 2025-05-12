@@ -25,7 +25,7 @@ export function CategoryRecipes() {
                 description={"Confira as receitas disponíveis"}
             />
 
-            <div className="flex flex-col gap-4 p-6"> 
+            <div className="flex flex-col gap-4 p-6 fade"> 
                 <SearchBar
                     placeholder="Buscar receita..."
                     value={busca}

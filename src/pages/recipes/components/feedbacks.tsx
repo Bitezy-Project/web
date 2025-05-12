@@ -28,7 +28,7 @@ export function RecipeFeedbacks() {
     ])
 
     return (
-        <div className="flex flex-col min-h-screen bg-white">
+        <div className="flex flex-col min-h-screen bg-white fade">
             <div className="p-4">
                 <button
                     onClick={() => alert("Função de adicionar ainda não implementada.")}

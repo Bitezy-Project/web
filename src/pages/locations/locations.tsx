@@ -26,7 +26,7 @@ export function Locations() {
                 title="Localizações"
                 description="Encontre os melhores locais para visitar."
             />
-            <div className="flex flex-col gap-4 p-6">
+            <div className="flex flex-col gap-4 p-6 fade">
                 <SearchBar placeholder="Digite aqui..." />
 
                 <MapContainer
