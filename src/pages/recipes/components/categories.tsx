@@ -22,6 +22,7 @@ export function RecipesCategories() {
                     <CardButton className="py-2" label="Almoço" onClick={() => navigate("/recipes/" + RECIPE_CATEGORIES.LUNCH)} />
                     <CardButton className="py-2" label="Jantar" onClick={() => navigate("/recipes/" + RECIPE_CATEGORIES.DINNER)} />
                     <CardButton className="py-2" label="Snacks" onClick={() => navigate("/recipes/" + RECIPE_CATEGORIES.SNACKS)} />
+                    <CardButton className="col-span-2 py-2" label="Ver todos" onClick={() => navigate("/recipes/" + RECIPE_CATEGORIES.ALL)} />
                 </div>
             </div>
         </div>
