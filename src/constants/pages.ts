@@ -4,6 +4,7 @@ export enum PAGES_PATH {
     PRODUCTS = "/products",
     RECIPES = "/recipes",
     LOCATIONS = "/locations",
+    LOGIN = "/login",
 }
 
 interface PageMessage {
@@ -36,6 +37,11 @@ export const PAGES_MESSAGE = {
     [PAGES_PATH.LOCATIONS]: {
         title: "Locais Confiáveis",
         description: "Aqui você encontra locais confiáveis para o seu consumo.",
+        returnButton: true
+    },
+    [PAGES_PATH.LOGIN]: {
+        title: "Login",
+        description: "Faça login para acessar sua conta.",
         returnButton: true
     },
 } satisfies Record<PAGES_PATH, PageMessage>;

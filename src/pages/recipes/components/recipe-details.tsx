@@ -4,20 +4,48 @@ import { Clock, BarChart, Star } from "lucide-react";
 import MOCKED_RECIPES from "@/assets/receitas.json";
 import { PageHeader } from "@/components/ui/page-header";
 import { TRecipe } from "../@types/recipe";
+import { set } from "react-hook-form";
+import { API_BASE_URL } from "@/constants/config";
 
 
 export function RecipeDetails() {
     const navigate = useNavigate();
     const pathParams = useParams()
+    const [loading, setLoading] = useState(true);
+    const [erro, setErro] = useState(false);
+    // const recipeId = pathParams.recipeId as string;
     const recipeId = pathParams.recipeId as string;
-    const recipe = Object.values(MOCKED_RECIPES).flat().find((r) => r.id === recipeId) as TRecipe; 
+    const [recipe, setRecipe] = useState<TRecipe | null>(null);
 
-    if (!recipeId || !recipe ) return
+
+    useEffect(() => {
+        async function fetchRecipe() {
+            setLoading(true);
+            setErro(false);
+            try {
+                let res;
+                res = await fetch(`${API_BASE_URL}/receitas/${recipeId}`);
+                if (!res.ok) throw new Error("Erro ao buscar receita");
+                const data = await res.json();
+                setRecipe(data);
+            } catch (err) {
+                console.error(err);
+                setErro(true);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchRecipe();
+        
+    }, [recipeId]);
+
+    if (!recipe) return;
 
     return (
         <div className="flex flex-col min-h-screen bg-white fade">
             <PageHeader
-                title={recipe.name}
+                title={recipe.title}
                 className="pb-3"
                 description={"Veja os detalhes da receita"}
             />
@@ -25,7 +53,7 @@ export function RecipeDetails() {
                 <div className="flex justify-between items-center text-sm">
                     <div className="flex gap-3 text-gray-800">
                         <span className="flex items-center gap-1 font-medium">
-                            <Clock size={16} /> {recipe.time}
+                            <Clock size={16} /> {recipe.prep_time}
                         </span>
                         <span className="flex items-center gap-1 font-medium">
                             <BarChart size={16} /> {recipe.difficulty}
@@ -44,7 +72,7 @@ export function RecipeDetails() {
 
                     <button
                         className="bg-white text-[#1f3a2c] px-3 py-1 rounded-full text-xs font-semibold ml-auto"
-                        onClick={() => navigate(`./feedbacks`, { relative: "path" })}
+                        onClick={() => navigate(`feedback`, { relative: "path" })}
                     >
                         Ver Feedbacks
                     </button>
@@ -64,7 +92,12 @@ export function RecipeDetails() {
                 <div>
                     <h2 className="font-bold text-[#1f3a2c] text-lg">Modo de Preparo</h2>
                     <p className="text-sm text-gray-700 whitespace-pre-line">
-                        {recipe.preparation}
+                        {recipe.steps.map((item, i) => (
+                            <span key={i}>
+                                {item}
+                                {i < recipe.steps.length - 1 && <br />}
+                            </span>
+                        ))}
                     </p>
                 </div>
             </div>

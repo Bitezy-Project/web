@@ -1,37 +1,61 @@
 import { useSearchParams, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { Star } from "lucide-react";
+import MOCKED_RECIPES from "@/assets/receitas.json";
+import { PageHeader } from "@/components/ui/page-header";
+import { TRecipe } from "../@types/recipe";
+import { API_BASE_URL } from "@/constants/config";
+import { useEffect } from "react";
+import { Feedback } from "../@types/recipe";
+import { set } from "react-hook-form";
 
-const feedbacks = [
-    
-    
-];
 
 
 export function RecipeFeedbacks() {
+    const navigate = useNavigate();
     const pathParams = useParams()
     const recipeId = pathParams.recipeId as string;
+    const [feedbacks, setFeedback] = useState<Feedback[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [erro, setErro] = useState(false);
+    const [recipe, setRecipe] = useState<TRecipe | null>(null);
 
-    const [feedbacks, setFeedback] = useState([
-        {
-            id: "1",
-            nome: "Anônimo",
-            rating: 4,
-            comment: "Achei que tinha poucas opções de sorvete sem glúten. Atendimento muito bom.",
-        },
-        {
-            id: "2",
-            nome: "Anônimo",
-            rating: 3,
-            comment: "Bom custo-benefício.",
+
+    
+    useEffect(() => {
+        async function fetchFeedback() {
+            setLoading(true);
+            setErro(false);
+            try {
+                let res;
+                res = await fetch(`${API_BASE_URL}/receitas/${recipeId}/feedback`);
+                if (!res.ok) throw new Error("Erro ao buscar receita");
+                const data = await res.json();
+                setRecipe(data);
+                setFeedback(data.feedbacks);
+            } catch (err) {
+                console.error(err);
+                setErro(true);
+            } finally {
+                setLoading(false);
+            }
         }
-    ])
 
+        fetchFeedback();
+        
+    }, [recipeId]);
+    
+    if (!recipe) return;
     return (
         <div className="flex flex-col min-h-screen bg-white fade">
+              <PageHeader
+                title={"Feedbacks " + recipe?.title}
+                className="pb-3"
+                description={"Veja as avaliações da receita"}
+                />
             <div className="p-4">
                 <button
-                    onClick={() => alert("Função de adicionar ainda não implementada.")}
+                    onClick={() => navigate(`./create`, { relative: "path" })}
                     className="bg-[#9DA87F] text-white font-semibold px-4 py-2 rounded-md hover:bg-[#8a996f] transition"
                 >
                     Adicionar seu Feedback
@@ -44,7 +68,7 @@ export function RecipeFeedbacks() {
                 ) : (
                     feedbacks.map((fb, i) => (
                         <div key={i} className="bg-white border rounded-xl p-4 shadow-sm">
-                            <p className="font-bold text-[#1f3d2b]">{fb.nome}</p>
+                            <p className="font-bold text-[#1f3d2b]">{fb.autor}</p>
                             <div className="flex gap-1 mt-1">
                                 {Array.from({ length: 5 }).map((_, j) => (
                                     <Star
@@ -58,7 +82,7 @@ export function RecipeFeedbacks() {
                                     />
                                 ))}
                             </div>
-                            <p className="text-sm text-gray-700 mt-2">{fb.comment}</p>
+                            <p className="text-sm text-gray-700 mt-2">{fb.comentario}</p>
                         </div>
                     ))
                 )}

@@ -23,8 +23,8 @@ export function PageHeader({ title, description, returnButton = true, className 
                         onClick={() => navigate(-1)}
                         className="fade gap-0.5 mb-auto w-fit flex items-center text-primary-foreground/70 mt-2 text-sm font-medium hover:text-primary-foreground hover:opacity-100 transition-all hover:bg-white/20 bg-white/10 px-4 py-2 rounded-lg"
                     >
-                        <ArrowLeft size={16} />
-                        Voltar
+                        <ArrowLeft size={16}  />
+                    
                     </button>
                 )
             }

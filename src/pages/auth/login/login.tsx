@@ -37,7 +37,7 @@ export function Login() {
 
     return (
         <div className="flex flex-col items-center justify-center gap-6 h-full bg-muted">
-            <Card className="overflow-hidden w-full max-w-[26rem]">
+            <Card className="overflow-hidden w-full max-w-[26rem] bg-primary">
                 <CardContent className="flex flex-col gap-6 p-6">
                     <div className="flex flex-col">
                         <h1 className="text-2xl font-semibold">Login</h1>
