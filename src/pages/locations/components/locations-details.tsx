@@ -6,58 +6,61 @@ import { Icon } from "leaflet";
 import pinVerde from "@/assets/pinIcon.png";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import { useEffect, useState } from "react";
+import { API_BASE_URL } from "@/constants/config";
+import { Location } from "../@types/location";
 
-// Mock simulado
-const localMock = {
-  id: 1,
-  nome: "Sorveteria da Maria",
-  descricao: "Sorveteria com diversas opções sem glúten. Também servem bolos e tortas",
-  nota: 4,
-  endereco: "Rua Quata, 200 - Moema",
-  local: { nome: "Restaurante Sem Glúten", lat: -23.561414, lng: -46.655881 },
-};
 const markerIcon = new Icon({
     iconUrl: pinVerde,
     iconSize: [32, 32], 
     iconAnchor: [16, 32]
 });
 
-
-const feedbacks = [
-  {
-    nome: "Anônimo",
-    nota: 4,
-    comentario: "Achei que tinha poucas opções de sorvete sem glúten. Atendimento muito bom.",
-  },
-  {
-    nome: "Anônimo",
-    nota: 3,
-    comentario: "Achei que tinha poucas opções de sorvete sem glúten. Atendimento muito bom.",
-  },
-];
-
 export function LocationsDetails() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
+  const [loading, setLoading] = useState(true);
+  const [erro, setErro] = useState(false);
+  const [local, setLocal] = useState<Location | null>(null);
+  const [feedbacks, setFeedbacks] = useState<any[]>([]);
 
-  console.log("ID do local:", id);
-
-  const local = localMock;
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    async function fetchMap() {
+      setLoading(true);
+      setErro(false);
+      try {
+        const res = await fetch(`${API_BASE_URL}/places/${id}`, { method: "GET" });
+        if (!res.ok) throw new Error("Erro ao buscar local");
+        const data = await res.json();
+        setLocal(data);
+        console.log(data);
+        setFeedbacks(data.reviews);
+      } catch (err) {
+        console.error(err);
+        setErro(true);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchMap();
+  }, [id]);
+
+  if (!local) return <div className="p-4">Carregando...</div>;
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      
-        <PageHeader
-            title={"Detalhes do " + local.nome}
-            className="pb-3"
-            description={"Veja mais informações sobre o" + local.nome}
-        />
+      <PageHeader
+        title={`${local.name}`}
+        className="pb-3"
+        description={`Veja mais informações sobre o ${local.name}`}
+      />
 
-      {/* Card principal */}
       <div className="p-4">
         <Card className="p-4 shadow-md rounded-xl bg-white text-[#1f3d2b]">
-          <h2 className="font-bold text-lg">{local.nome}</h2>
+          <h2 className="font-bold text-lg">{local.name}</h2>
 
           <div className="flex gap-1 mt-1 mb-2">
             {Array.from({ length: 5 }).map((_, i) => (
@@ -65,7 +68,7 @@ export function LocationsDetails() {
                 key={i}
                 size={16}
                 className={
-                  i < local.nota
+                  i < local.rating
                     ? "fill-yellow-400 stroke-yellow-400"
                     : "text-gray-300"
                 }
@@ -73,36 +76,33 @@ export function LocationsDetails() {
             ))}
           </div>
 
-          <p className="text-sm mb-4">{local.descricao}</p>
-          <p className="text-sm font-semibold mb-1">{local.endereco}</p>
-            <MapContainer
-                center={[-23.561414, -46.655881]}
-                zoom={15}
-                style={{ height: "300px", width: "100%", borderRadius: "12px" }}
-            >
-                <TileLayer
-                    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <Marker key={local.id} position={[local.local.lat, local.local.lng]} icon={markerIcon}>
-                    <Popup>{local.nome}</Popup>
-                </Marker>
-               
-            </MapContainer>
+          <p className="text-sm mb-4">{local.description}</p>
+          <p className="text-sm font-semibold mb-1">{local.adress}</p>
+
+          <MapContainer
+            center={[local.location.lat, local.location.lng]}
+            zoom={15}
+            style={{ height: "300px", width: "100%", borderRadius: "12px" }}
+          >
+            <TileLayer
+              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <Marker key={local.place_id} position={[local.location.lat, local.location.lng]} icon={markerIcon}>
+              <Popup>{local.name}</Popup>
+            </Marker>
+          </MapContainer>
         </Card>
       </div>
 
-      {/* Seção de feedbacks */}
       <div className="px-4">
         <h2 className="font-bold text-[#1f3d2b] mb-2">Feedbacks</h2>
 
         <button
-          onClick={() =>
-            navigate(`feedbacks/create`, { relative: "path" })
-          }
+          onClick={() => navigate(`feedbacks/create`, { relative: "path" })}
           className="bg-[#9DA87F] text-white font-semibold px-4 py-2 rounded-md mb-4"
         >
-          Adicionar seu FeedBack
+          Adicionar seu Feedback
         </button>
 
         <div className="flex flex-col gap-3 pb-20">

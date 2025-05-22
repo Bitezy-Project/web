@@ -30,10 +30,10 @@ export function CategoryRecipes() {
             try {
                 let res
                 if (categoryKey !== RECIPE_CATEGORIES.ALL) {
-                    res = await fetch(`${API_BASE_URL}/receitas/categoria/${categoryKey}`);
+                    res = await fetch(`${API_BASE_URL}/receitas/categoria/${categoryKey}`, { method: "GET" });
                 }
                 else {
-                    res = await fetch(`${API_BASE_URL}/recipes`);
+                    res = await fetch(`${API_BASE_URL}/receitas`, { method: "GET" });
                 }
                 if (!res.ok) throw new Error("Erro ao buscar receitas");
                 const data = await res.json();

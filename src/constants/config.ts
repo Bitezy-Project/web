@@ -1,1 +1,1 @@
-export const API_BASE_URL = window.location.origin == 'http://localhost:5173' ? "http://localhost:3333" : ""
+export const API_BASE_URL = window.location.origin == 'http://localhost:5173' ? "http://localhost:8000" : ""

@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Card } from "@/components/ui/card";
@@ -9,6 +9,8 @@ import pinVerde from "@/assets/pinIcon.png";
 import { PageHeader } from "@/components/ui/page-header";
 import { API_BASE_URL } from "@/constants/config";
 import { Location } from "../@types/location";
+import { set } from "react-hook-form";
+import { Star } from "lucide-react";
 
 const markerIcon = new Icon({
     iconUrl: pinVerde,
@@ -16,8 +18,18 @@ const markerIcon = new Icon({
     iconAnchor: [16, 32]
 });
 
+// Componente auxiliar para recentralizar o mapa
+function MapCenterUpdater({ center }: { center: [number, number] }) {
+    const map = useMap();
 
+    useEffect(() => {
+        if (center[0] !== 0 && center[1] !== 0) {
+            map.setView(center);
+        }
+    }, [center, map]);
 
+    return null;
+}
 
 export function LocationsMap() {
 
@@ -25,15 +37,33 @@ export function LocationsMap() {
     const [busca, setBusca] = useState("");
     const [loading, setLoading] = useState(true);
     const [erro, setErro] = useState(false);
+    const [center, setCenter] = useState<[number, number]>([0,0]); // Coordenadas iniciais
     const [locais, setLocais] = useState<Location[]>([]); // Defina o tipo correto para os locais
+    const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
+
+    useEffect(() => {
+        // Obter localização do usuário
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    setUserLocation([latitude, longitude]);
+                    setCenter([latitude, longitude]); // Atualiza o centro do mapa com a localização do usuário
+                },
+                (error) => {
+                    console.warn("Erro ao obter localização:", error);
+                }
+            );
+        }
+    }, []);
 
     useEffect(() => {
         async function fetchMap() {
+            if (center[0] === 0 && center[1] === 0) return; // Evita requisição inválida
             setLoading(true);
             setErro(false);
             try {
-                let res;
-                res = await fetch(`${API_BASE_URL}/places`);
+                const res = await fetch(`${API_BASE_URL}/places/?lat=${center[0]}&lng=${center[1]}`);
                 if (!res.ok) throw new Error("Erro ao buscar locais");
                 const data = await res.json();
                 setLocais(data);
@@ -46,17 +76,15 @@ export function LocationsMap() {
         }
 
         fetchMap();
-        
-    }, []);
+    }, [center]);
 
-    console.log(locais);
+   
 
     const handleEnterSearch = () => {
-    if (busca.trim()) {
-        navigate(`/locations/${busca.toLowerCase()}`);
-    }
+        if (busca.trim()) {
+            navigate(`/locations/${busca.toLowerCase()}/${center}`);
+        }
     };
-
 
     return (
         <div className="flex flex-col bg-white min-h-screen">
@@ -73,7 +101,7 @@ export function LocationsMap() {
                 />
 
                 <MapContainer
-                    center={[-23.561414, -46.655881]}
+                    center={center}
                     zoom={15}
                     style={{ height: "300px", width: "100%", borderRadius: "12px" }}
                 >
@@ -81,9 +109,34 @@ export function LocationsMap() {
                         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
+                    <MapCenterUpdater center={center} />
+
                     {locais.map((local, idx) => (
                         <Marker key={idx} position={[local.location.lat, local.location.lng]} icon={markerIcon}>
-                            <Popup>{local.name}</Popup>
+                            <Popup>
+                                <div 
+                                    className="font-bold mb-1 text-[#1f3d2b] cursor-pointer hover:underline"
+                                    onClick={
+                                        
+                                        () => navigate(`${local.place_id}`)}
+                                >
+                                    {local.name}
+                                </div>
+                                <div className="flex gap-1 mb-1">
+                                    {Array.from({ length: 5 }).map((_, i) => (
+                                        <Star
+                                            key={i}
+                                            size={14}
+                                            className={
+                                                i < local.rating
+                                                    ? "fill-yellow-400 stroke-yellow-400"
+                                                    : "text-gray-300"
+                                            }
+                                        />
+                                    ))}
+                                </div>
+                                <p className="text-sm text-gray-700">{local.description}</p>
+                            </Popup>
                         </Marker>
                     ))}
                 </MapContainer>

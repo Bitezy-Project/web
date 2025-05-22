@@ -10,9 +10,9 @@ export function Locations() {
         <div className="flex flex-col min-h-screen bg-white gap-4">
             <Routes>
                 <Route path="/" element={< LocationsMap/>} />
-                <Route path="/:categoria" element={<LocationsSearch />} />
-                <Route path="/:categoria/:localId" element={<LocationsDetails />} />
-                <Route path="/:categoria/:localId/feedbacks/create" element={<FeedbackCreate />} />
+                <Route path="/:id" element={<LocationsDetails />} />
+                <Route path="/:busca/:center" element={<LocationsSearch />} />
+                <Route path="/:id/feedbacks/create" element={<FeedbackCreate />} />
             </Routes>
         </div>
     );

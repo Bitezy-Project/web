@@ -9,33 +9,12 @@ import { API_BASE_URL } from "@/constants/config";
 import { useEffect } from "react";
 
 // Substitua por seu JSON real depois
-const MOCKED_LOCAIS = [
-  {
-    id: 1,
-    nome: "Sorveteria da Maria",
-    categoria: "doces",
-    descricao: "Sorveteria com diversas opções sem glúten. Também servem bolos e tortas",
-    nota: 4,
-  },
-  {
-    id: 2,
-    nome: "Casa dos Bolos",
-    categoria: "doces",
-    descricao: "Sorveteria com diversas opções sem glúten. Também servem bolos e tortas",
-    nota: 4,
-  },
-  {
-    id: 3,
-    nome: "Sorvetemania",
-    categoria: "doces",
-    descricao: "Sorveteria com diversas opções sem glúten. Também servem bolos e tortas",
-    nota: 3,
-  },
-];
+
 
 export function LocationsSearch() {
   const pathParams = useParams();
   const busca = pathParams.busca as string;
+  const center = pathParams.center as string;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState(false);
@@ -48,7 +27,7 @@ export function LocationsSearch() {
         setErro(false);
         try {
             let res;
-            res = await fetch(`${API_BASE_URL}/places?adress=${busca}`); 
+            res = await fetch(`${API_BASE_URL}/places?name=${busca}&lat=${center?.split(",")[0]}&lng=${center?.split(",")[1]}`); 
             if (!res.ok) throw new Error("Erro ao buscar locais");
             const data = await res.json();
             setLocais(data);
@@ -77,9 +56,11 @@ console.log(locais)
         <div className="flex flex-col gap-4 pb-10">
           {locais.map((local) => (
             <Card
-              key={local.id}
+              key={local.place_id}
               className="p-4 rounded-xl shadow-md cursor-pointer bg-white border"
-              onClick={() => navigate(`${local.id}`)}
+              onClick={() => {
+                      navigate(`/locations/${local.place_id}`);
+              }}
             >
               <h2 className="font-bold text-[#1f3d2b] mb-1">{local.name}</h2>
               <div className="flex gap-1 mb-1">
