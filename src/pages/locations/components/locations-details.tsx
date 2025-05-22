@@ -106,7 +106,12 @@ export function LocationsDetails() {
         </button>
 
         <div className="flex flex-col gap-3 pb-20">
-          {feedbacks.map((fb, i) => (
+          {feedbacks.length === 0 ? (
+            <p className="text-center text-sm text-gray-500">
+              Nenhum feedback ainda.
+            </p>
+          ) : (
+            feedbacks.map((fb, i) => (
             <Card key={i} className="p-4 rounded-xl shadow-sm bg-white text-sm">
               <p className="font-semibold text-[#1f3d2b] mb-1">{fb.nome}</p>
               <div className="flex gap-1 mb-2">
@@ -120,10 +125,12 @@ export function LocationsDetails() {
                         : "text-gray-300"
                     }
                   />
-                ))}
+                ))
+              }
               </div>
-              <p className="text-gray-700">{fb.comentario}</p>
-            </Card>
+              <p className="text-sm text-gray-700">{fb.comentario}</p>
+              </Card>
+          )
           ))}
         </div>
       </div>
