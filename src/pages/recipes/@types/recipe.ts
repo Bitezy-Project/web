@@ -11,7 +11,7 @@
 
 
 export type TRecipe = {
-    id: string;
+    _id: string;
     title: string
     category: string
     difficulty: string
@@ -26,5 +26,5 @@ export type TRecipe = {
 export type Feedback = {
     autor: string;
     comentario: string;
-    rating: number;
+    nota: number;
 };

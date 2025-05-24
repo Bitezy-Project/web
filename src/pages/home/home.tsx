@@ -9,9 +9,37 @@ import { FaBook } from "react-icons/fa";
 import { CardButton } from "@/components/ui/card-button";
 import { PAGES_PATH } from "@/constants/pages";
 import { PageHeader } from "@/components/ui/page-header";
+import { API_BASE_URL } from "@/constants/config";
+import { useState } from "react";
 
 export function Home() {
     const navigate = useNavigate();
+
+    const [busca, setBusca] = useState("");
+
+        const handleSearch = async () => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/receitas`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ prompt: busca }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erro: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Resultado da busca:", data);
+
+        
+        navigate('/recipes/details', { state: { recipe: data } }); // exemplo usando a primeira
+        } catch (error) {
+            console.error("Erro ao buscar receitas:", error);
+        }
+    };
 
     return (
         <div className="flex flex-col bg-white min-h-screen">
@@ -22,7 +50,11 @@ export function Home() {
             />
 
             <div className="flex flex-col gap-4 p-6 fade">
-                <SearchBar placeholder="Pesquise algum tópico" />
+                <SearchBar placeholder="O que você quer comer?"
+                    value={busca}
+                    onChange={setBusca}
+                    onEnterPress={handleSearch}
+                />
 
                 <div className="grid grid-cols-2 gap-2">
                     <CardButton

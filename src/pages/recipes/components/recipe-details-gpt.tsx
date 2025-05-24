@@ -1,4 +1,4 @@
-import { useSearchParams, useNavigate, useParams } from "react-router-dom";
+import { useSearchParams, useNavigate, useParams, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Clock, BarChart, Star } from "lucide-react";
 import MOCKED_RECIPES from "@/assets/receitas.json";
@@ -8,39 +8,20 @@ import { set } from "react-hook-form";
 import { API_BASE_URL } from "@/constants/config";
 
 
-export function RecipeDetails() {
+export function RecipeDetails2() {
     const navigate = useNavigate();
     const pathParams = useParams()
     const [loading, setLoading] = useState(true);
     const [erro, setErro] = useState(false);
+
+    const location = useLocation();
     // const recipeId = pathParams.recipeId as string;
-    const recipeId = pathParams.recipeId as string;
-    const [recipe, setRecipe] = useState<TRecipe | null>(null);
+    const recipe = (location.state as { recipe: TRecipe }).recipe;
 
+    if (!recipe) return <div>Receita não encontrada</div>;
 
-    useEffect(() => {
-        async function fetchRecipe() {
-            setLoading(true);
-            setErro(false);
-            try {
-                let res;
-                res = await fetch(`${API_BASE_URL}/receitas/${recipeId}`);
-                if (!res.ok) throw new Error("Erro ao buscar receita");
-                const data = await res.json();
-                setRecipe(data);
-            } catch (err) {
-                console.error(err);
-                setErro(true);
-            } finally {
-                setLoading(false);
-            }
-        }
+    console.log(recipe);
 
-        fetchRecipe();
-        
-    }, [recipeId]);
-
-    if (!recipe) return;
 
     return (
         <div className="flex flex-col min-h-screen bg-white fade">
@@ -63,16 +44,15 @@ export function RecipeDetails() {
 
                 <div className="flex gap-1 items-center">
                     {recipe.rating === 0 ? (
-                        <span className="text-gray-300">Ainda não avaliado</span>
+                        <span className="text-gray-300">Ainda não há avaliações</span>
                     ) : (
-                        Array.from({ length: 5 }).map((_, i) => (
-                            <Star
-                                key={i}
-                                size={16}
-                                className={i < recipe.rating ? "fill-yellow-400 stroke-yellow-400" : "text-gray-300"}
-                            />
-                        ))
-                    )}
+                    Array.from({ length: 5 }).map((_, i) => (
+                        <Star
+                            key={i}
+                            size={16}
+                            className={i < recipe.rating ? "fill-yellow-400 stroke-yellow-400" : "text-gray-300"}
+                        />
+                    )))}
 
                     <button
                         className="bg-white text-[#1f3a2c] px-3 py-1 rounded-full text-xs font-semibold ml-auto"

@@ -51,6 +51,7 @@ export function CategoryRecipes() {
         }
     }, [categoryKey]);
     console.log(categoryKey);
+    console.log(recipes);
 
         return (
             <div className="flex flex-col bg-white min-h-screen">
@@ -72,8 +73,8 @@ export function CategoryRecipes() {
                             <div className="flex flex-col gap-4 pb-10">
                                 {recipes.map((r) => (
                                     <Card
-                                        key={r.id}
-                                        onClick={() => navigate(`/recipes/${categoryKey}/${r.id}`)}
+                                        key={r._id}
+                                        onClick={() => navigate(`/recipes/category/${categoryKey}/recipe/${r._id}`)}
                                         className="flex gap-4 bg-[#e6e6e6] p-3 rounded-xl shadow-md cursor-pointer"
                                     >
                                         <div className="flex flex-col justify-between flex-1">
@@ -88,13 +89,18 @@ export function CategoryRecipes() {
                                             </div>
                                             <p className="text-xs text-gray-600">{RECIPE_CATEGORIES_LABELS[categoryKey]}</p>
                                             <div className="flex gap-1 mt-1">
-                                                {Array.from({ length: 5 }).map((_, i) => (
-                                                    <Star
-                                                        key={i}
-                                                        size={14}
-                                                        className={i < r.rating ? "fill-yellow-400 stroke-yellow-400" : "text-gray-300"}
-                                                    />
-                                                ))}
+                                                {r.rating === 0 ? (
+                                                    <span className="text-[#1f3d2b] text-100">Ainda não avaliado</span>
+                                                ) : (
+                                                    Array.from({ length: 5 }).map((_, i) => (
+                                                        <Star
+                                                            key={i}
+                                                            size={14}
+                                                            className={i < r.rating ? "fill-yellow-400 stroke-yellow-400" : "text-gray-300"}
+                                                        />
+                                                    ))
+                                                )}
+                                                
                                             </div>
                                         </div>
                                     </Card>

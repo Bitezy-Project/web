@@ -64,17 +64,20 @@ console.log(locais)
             >
               <h2 className="font-bold text-[#1f3d2b] mb-1">{local.name}</h2>
               <div className="flex gap-1 mb-1">
-                {Array.from({ length: 5 }).map((_, i) => (
+                {local.media === 0 ? (
+                  <p className="text-sm text-gray-500">Nenhuma avaliação ainda.</p>
+                ) : (Array.from({ length: 5 }).map((_, i) => (
                   <Star
                     key={i}
-                    size={14}
+                    size={16}
                     className={
-                      i < local.rating
+                      i < local.media
                         ? "fill-yellow-400 stroke-yellow-400"
                         : "text-gray-300"
                     }
                   />
-                ))}
+                    ))
+                )}
               </div>
               <p className="text-sm text-gray-700">{local.description}</p>
             </Card>

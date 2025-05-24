@@ -6,6 +6,7 @@ import MOCKED_RECIPES from "@/assets/receitas.json";
 import { TRecipe } from "../@types/recipe";
 import { API_BASE_URL } from "@/constants/config";
 import { useEffect } from "react";
+import { useUser } from "@clerk/clerk-react";
 
 export function FeedbackCreate() {
   const [params] = useSearchParams();
@@ -20,7 +21,7 @@ export function FeedbackCreate() {
   const [comentario, setComentario] = useState("");
   const [anonimo, setAnonimo] = useState(false);
 
-  
+  const { user } = useUser();
   
 
   useEffect(() => {
@@ -59,6 +60,7 @@ export function FeedbackCreate() {
     const feedback = {
       nota,
       comentario,
+      autor: anonimo ? "Anônimo" : user?.fullName || "Usuário desconhecido",
 
     };
 

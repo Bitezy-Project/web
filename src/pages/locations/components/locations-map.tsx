@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvent } from "react-leaflet";
 import { Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Card } from "@/components/ui/card";
@@ -9,27 +9,44 @@ import pinVerde from "@/assets/pinIcon.png";
 import { PageHeader } from "@/components/ui/page-header";
 import { API_BASE_URL } from "@/constants/config";
 import { Location } from "../@types/location";
-import { set } from "react-hook-form";
 import { Star } from "lucide-react";
 
 const markerIcon = new Icon({
     iconUrl: pinVerde,
-    iconSize: [32, 32], 
+    iconSize: [32, 32],
     iconAnchor: [16, 32]
 });
 
-// Componente auxiliar para recentralizar o mapa
+// Atualiza o center quando o usuário move o mapa
+function MapMoveHandler({ onMove }: { onMove: React.Dispatch<React.SetStateAction<[number, number]>> }) {
+    const map = useMap();
+
+    useMapEvent('moveend', () => {
+        const newCenter = map.getCenter();
+        const newLatLng: [number, number] = [newCenter.lat, newCenter.lng];
+
+        onMove((prevCenter: [number, number]) => {
+            if (prevCenter[0] !== newLatLng[0] || prevCenter[1] !== newLatLng[1]) {
+                return newLatLng;
+            }
+            return prevCenter;
+        });
+    });
+
+    return null;
+}
+
 function MapCenterUpdater({ center }: { center: [number, number] }) {
     const map = useMap();
 
     useEffect(() => {
-        if (center[0] !== 0 && center[1] !== 0) {
-            map.setView(center);
-        }
+        map.setView(center);
     }, [center, map]);
 
     return null;
 }
+
+
 
 export function LocationsMap() {
 
@@ -37,18 +54,18 @@ export function LocationsMap() {
     const [busca, setBusca] = useState("");
     const [loading, setLoading] = useState(true);
     const [erro, setErro] = useState(false);
-    const [center, setCenter] = useState<[number, number]>([0,0]); // Coordenadas iniciais
-    const [locais, setLocais] = useState<Location[]>([]); // Defina o tipo correto para os locais
+    const [center, setCenter] = useState<[number, number]>([0, 0]); 
+    const [locais, setLocais] = useState<Location[]>([]);
     const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
 
     useEffect(() => {
-        // Obter localização do usuário
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const { latitude, longitude } = position.coords;
                     setUserLocation([latitude, longitude]);
-                    setCenter([latitude, longitude]); // Atualiza o centro do mapa com a localização do usuário
+                    setCenter([latitude, longitude]);
+                    
                 },
                 (error) => {
                     console.warn("Erro ao obter localização:", error);
@@ -59,7 +76,7 @@ export function LocationsMap() {
 
     useEffect(() => {
         async function fetchMap() {
-            if (center[0] === 0 && center[1] === 0) return; // Evita requisição inválida
+            if (center[0] === 0 && center[1] === 0) return;
             setLoading(true);
             setErro(false);
             try {
@@ -78,14 +95,12 @@ export function LocationsMap() {
         fetchMap();
     }, [center]);
 
-   
-
     const handleEnterSearch = () => {
         if (busca.trim()) {
             navigate(`/locations/${busca.toLowerCase()}/${center}`);
         }
     };
-
+    console.log(locais);
     return (
         <div className="flex flex-col bg-white min-h-screen">
             <PageHeader
@@ -109,31 +124,35 @@ export function LocationsMap() {
                         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
+
                     <MapCenterUpdater center={center} />
+                    <MapMoveHandler onMove={setCenter} />
 
                     {locais.map((local, idx) => (
                         <Marker key={idx} position={[local.location.lat, local.location.lng]} icon={markerIcon}>
                             <Popup>
-                                <div 
+                                <div
                                     className="font-bold mb-1 text-[#1f3d2b] cursor-pointer hover:underline"
-                                    onClick={
-                                        
-                                        () => navigate(`${local.place_id}`)}
+                                    onClick={() => navigate(`${local.place_id}`)}
                                 >
                                     {local.name}
                                 </div>
                                 <div className="flex gap-1 mb-1">
-                                    {Array.from({ length: 5 }).map((_, i) => (
+                                    {local.media === 0 ? (
+                                        <p className="text-sm text-gray-500">Nenhuma avaliação ainda.</p>
+                                        ) : (
+                                        Array.from({ length: 5 }).map((_, i) => (
                                         <Star
                                             key={i}
-                                            size={14}
+                                            size={16}
                                             className={
-                                                i < local.rating
-                                                    ? "fill-yellow-400 stroke-yellow-400"
-                                                    : "text-gray-300"
+                                            i < local.media
+                                                ? "fill-yellow-400 stroke-yellow-400"
+                                                : "text-gray-300"
                                             }
                                         />
-                                    ))}
+                                        ))
+                                        )}
                                 </div>
                                 <p className="text-sm text-gray-700">{local.description}</p>
                             </Popup>

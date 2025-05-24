@@ -1,7 +1,7 @@
 export type Location = {
     place_id: string;
     name: string;
-    rating: number;
+    media: number;
     adress: string;
     location : {
         lat: number;
@@ -9,4 +9,10 @@ export type Location = {
     }
     reviews: String[];
     description: string;
+};
+
+export type Feedback = {
+    autor: string;
+    comentario: string;
+    nota: number;
 };

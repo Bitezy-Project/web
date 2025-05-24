@@ -28,11 +28,13 @@ export function RecipeFeedbacks() {
             setErro(false);
             try {
                 let res;
-                res = await fetch(`${API_BASE_URL}/receitas/${recipeId}/feedback`);
+                console.log("id" + recipeId)
+                res = await fetch(`${API_BASE_URL}/receitas/${recipeId}`);
                 if (!res.ok) throw new Error("Erro ao buscar receita");
                 const data = await res.json();
                 setRecipe(data);
                 setFeedback(data.feedbacks);
+                console.log(data.feedbacks);
             } catch (err) {
                 console.error(err);
                 setErro(true);
@@ -75,7 +77,7 @@ export function RecipeFeedbacks() {
                                         key={j}
                                         size={14}
                                         className={
-                                            j < fb.rating
+                                            j < Number(fb.nota)
                                                 ? "fill-yellow-400 stroke-yellow-400"
                                                 : "text-gray-300"
                                         }

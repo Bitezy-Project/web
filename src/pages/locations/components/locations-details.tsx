@@ -8,7 +8,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
 import { API_BASE_URL } from "@/constants/config";
-import { Location } from "../@types/location";
+import { Feedback, Location } from "../@types/location";
 
 const markerIcon = new Icon({
     iconUrl: pinVerde,
@@ -21,7 +21,7 @@ export function LocationsDetails() {
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState(false);
   const [local, setLocal] = useState<Location | null>(null);
-  const [feedbacks, setFeedbacks] = useState<any[]>([]);
+  const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
 
 
   const navigate = useNavigate();
@@ -63,17 +63,21 @@ export function LocationsDetails() {
           <h2 className="font-bold text-lg">{local.name}</h2>
 
           <div className="flex gap-1 mt-1 mb-2">
-            {Array.from({ length: 5 }).map((_, i) => (
+            {local.media === 0 ? (
+              <p className="text-sm text-gray-500">Nenhuma avaliação ainda.</p>
+            ) : (
+              Array.from({ length: 5 }).map((_, i) => (
               <Star
                 key={i}
                 size={16}
                 className={
-                  i < local.rating
+                  i < local.media
                     ? "fill-yellow-400 stroke-yellow-400"
                     : "text-gray-300"
                 }
               />
-            ))}
+            ))
+            )}
           </div>
 
           <p className="text-sm mb-4">{local.description}</p>
@@ -113,7 +117,7 @@ export function LocationsDetails() {
           ) : (
             feedbacks.map((fb, i) => (
             <Card key={i} className="p-4 rounded-xl shadow-sm bg-white text-sm">
-              <p className="font-semibold text-[#1f3d2b] mb-1">{fb.nome}</p>
+              <p className="font-semibold text-[#1f3d2b] mb-1">{fb.autor}</p>
               <div className="flex gap-1 mb-2">
                 {Array.from({ length: 5 }).map((_, j) => (
                   <Star
