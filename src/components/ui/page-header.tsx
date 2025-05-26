@@ -1,5 +1,5 @@
 import { ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
 
@@ -16,18 +16,32 @@ export function PageHeader({ title, description, returnButton = true, className 
                     <UserButton />
                 </SignedIn>
             </div>
+            {!returnButton && (
+            <div className="absolute top-6 left-6">
+                <Link
+                    to="/register"
+                    className="fade gap-0.5 mb-auto w-fit flex items-center text-primary-foreground/70 mt-2 text-sm font-medium hover:text-primary-foreground hover:opacity-100 transition-all hover:bg-white/20 bg-white/10 px-4 py-2 rounded-lg"
+                >
+                    Completar Cadastro
+                </Link>
+            </div>
+            )}
 
-            {
-                returnButton && (
-                    <button
-                        onClick={() => navigate(-1)}
+            {returnButton && (
+                <><div className="absolute top-6 left-20">
+                    <Link
+                        to="/register"
                         className="fade gap-0.5 mb-auto w-fit flex items-center text-primary-foreground/70 mt-2 text-sm font-medium hover:text-primary-foreground hover:opacity-100 transition-all hover:bg-white/20 bg-white/10 px-4 py-2 rounded-lg"
                     >
-                        <ArrowLeft size={16}  />
-                    
-                    </button>
-                )
-            }
+                        Completar Cadastro
+                    </Link>
+                </div><button
+                    onClick={() => navigate(-1)}
+                    className="fade gap-0.5 mb-auto w-fit flex items-center text-primary-foreground/70 mt-2 text-sm font-medium hover:text-primary-foreground hover:opacity-100 transition-all hover:bg-white/20 bg-white/10 px-4 py-2 rounded-lg"
+                >
+                        <ArrowLeft size={16} />
+                    </button></>
+            )}
 
             <h1 className="text-3xl font-bold">{title}</h1>
             <p className="opacity-80 leading-[1.25rem]">{description}</p>

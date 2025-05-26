@@ -5,7 +5,7 @@ import { Educational } from "./pages/educational/educational";
 import { Products } from "./pages/products/products";
 import { Recipes } from "./pages/recipes/recipes";
 import { Locations } from "./pages/locations/locations";
-import { Auth } from "./pages/login/auth";
+import { RegisterRoute } from "./pages/cadastro/cadastro-route";
 import { SignInButton, useUser } from "@clerk/clerk-react";
 
 export function App() {
@@ -19,7 +19,7 @@ export function App() {
         <Route path={PAGES_PATH.PRODUCTS + "/*"} element={<Products />} />
         <Route path={PAGES_PATH.RECIPES + "/*"} element={<Recipes />} />
         <Route path={PAGES_PATH.LOCATIONS + "/*"} element={<Locations />} />
-        <Route path={PAGES_PATH.LOGIN + "/*"} element={<Auth />} />
+        <Route path={PAGES_PATH.REGISTER + "/*"} element={< RegisterRoute/>} />
       </Routes>
     </div>
   ) : (
