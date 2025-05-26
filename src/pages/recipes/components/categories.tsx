@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { RECIPE_CATEGORIES } from "../constants/categories";
 import { useState } from "react";
 import { API_BASE_URL } from "@/constants/config";
-import { c } from "node_modules/vite/dist/node/types.d-aGj9QkWt";
 import { set } from "react-hook-form";
 
 export function RecipesCategories() {
