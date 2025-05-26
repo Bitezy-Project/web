@@ -2,7 +2,7 @@ export enum RECIPE_CATEGORIES {
     BREAKFAST = "cafe-da-manha",
     LUNCH = "almoco",
     DINNER = "jantar",
-    SNACKS = "snacks",
+    SNACKS = "lanche",
     ALL = "all",
 
 }
