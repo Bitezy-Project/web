@@ -67,5 +67,8 @@
     "vite": "^6.3.5",
     "vitest": "^2.1.8",
     "vitest-browser-react": "^0.0.4"
+  },
+  "engines": {
+    "node": "20.x"
   }
 }
