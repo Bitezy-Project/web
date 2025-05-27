@@ -61,7 +61,7 @@ export function CategoryRecipes() {
                 />
 
                 {
-                    (!categoryKey || !recipes) ? (
+                    (!categoryKey || !recipes || recipes.length === 0) ? (
                         <p className="p-6"> Não foi possível encontrar receitas nessa categoria.</p>
                     ) : (
                         <div className="flex flex-col gap-4 p-6 fade">
