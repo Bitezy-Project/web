@@ -112,37 +112,37 @@ export function Register() {
         <h1 className="text-3xl font-bold text-center mb-6">Cadastro de Restrição</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm">Idade</label>
-            <input
-              type="number"
-              className="w-full px-4 py-2 rounded border text-black"
-              value={idade}
-              onChange={(e) => setIdade(e.target.value)}
-              required
-            />
-          </div>
+          <input
+            type="number"
+            className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white/70 backdrop-blur-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#355E46]"
+            value={idade}
+            onChange={(e) => setIdade(e.target.value)}
+            placeholder="Digite sua idade"
+            required
+          />
 
-          <div>
-            <label className="block text-sm">Tipo de restrição ao glúten</label>
-            <select
-              className="w-full px-4 py-2 rounded border text-black"
-              value={tipoRestricao}
-              onChange={(e) => setTipoRestricao(e.target.value)}
-              required
-            >
-              <option value="">Selecione...</option>
-              <option value="celiaco">Doença Celíaca</option>
-              <option value="alergia">Alergia ao Glúten</option>
-              <option value="sensibilidade">Sensibilidade ao Glúten</option>
-              <option value="outros">Outros</option>
-            </select>
-          </div>
+
+
+        <div>
+          <label className="block text-sm">Tipo de restrição ao glúten</label>
+          <select
+            className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white/70 backdrop-blur-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#355E46]"
+            value={tipoRestricao}
+            onChange={(e) => setTipoRestricao(e.target.value)}
+            required
+          >
+            <option value="">Selecione...</option>
+            <option value="celiaco">Doença Celíaca</option>
+            <option value="alergia">Alergia ao Glúten</option>
+            <option value="sensibilidade">Sensibilidade ao Glúten</option>
+            <option value="outros">Outros</option>
+          </select>
+        </div>
 
           <div>
             <label className="block text-sm">Quando você descobriu sua restrição?</label>
             <select
-              className="w-full px-4 py-2 rounded border text-black"
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white/70 backdrop-blur-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#355E46]"
               value={tempoRestricao}
               onChange={(e) => setTempoRestricao(e.target.value)}
               required
@@ -160,16 +160,17 @@ export function Register() {
             <div className="space-y-1 text-black">
               {["Vegana", "Vegetariano", "Intolerante à lactose", "Diabético"].map((item) => (
                 <div key={item}>
-                  <label className="inline-flex items-center">
+                  <label className="inline-flex items-center space-x-2">
                     <input
                       type="checkbox"
                       value={item}
                       checked={outrasRestricoes.includes(item)}
                       onChange={handleCheckboxChange}
-                      className="mr-2"
+                      className="form-checkbox h-4 w-4 text-[#355E46] bg-white border-gray-300 rounded focus:ring-[#355E46]"
                     />
-                    {item}
+                    <span className="text-gray-700">{item}</span>
                   </label>
+
                 </div>
               ))}
             </div>
@@ -179,7 +180,7 @@ export function Register() {
             <label className="block text-sm">O que almoça normalmente?</label>
             <input
               type="text"
-              className="w-full px-4 py-2 rounded border text-black"
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white/70 backdrop-blur-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#355E46]"
               value={almoco}
               onChange={(e) => setAlmoco(e.target.value)}
               required
