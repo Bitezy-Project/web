@@ -52,8 +52,8 @@ console.log(locais)
       />
 
       <div className="flex flex-col gap-4 p-6 fade">
-
-        <div className="flex flex-col gap-4 pb-10">
+        {locais.length !== 0 ? (
+          <div className="flex flex-col gap-4 pb-10">
           {locais.map((local) => (
             <Card
               key={local.place_id}
@@ -83,6 +83,10 @@ console.log(locais)
             </Card>
           ))}
         </div>
+        ) : (
+          <p className="p-6"> Não foi possível encontrar locais com esse nome.</p>
+        )}
+        
       </div>
     </div>
   );
