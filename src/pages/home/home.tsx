@@ -14,6 +14,8 @@ import { useState } from "react";
 
 export function Home() {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [erroBusca, setErroBusca] = useState(false);
 
     const [busca, setBusca] = useState("");
 
@@ -29,8 +31,11 @@ export function Home() {
 
         if (!response.ok) {
             throw new Error(`Erro: ${response.status}`);
+            setLoading(false);
+            setErroBusca(true);
         }
-
+        setLoading(true);
+        setErroBusca(false);  // limpa erro, se tinha
         const data = await response.json();
         console.log("Resultado da busca:", data);
 
@@ -55,6 +60,14 @@ export function Home() {
                     onChange={setBusca}
                     onEnterPress={handleSearch}
                 />
+
+                {erroBusca && (
+                    <p className="text-red-500 text-sm">Não foi possível realizar sua busca de receitas. Tente buscar outra receita.</p>
+                )
+                }
+                {loading && (
+                    <p className="text-gray-500 text-sm">Buscando receitas...</p>
+                )}
 
                 <div className="grid grid-cols-2 gap-2">
                     <CardButton
