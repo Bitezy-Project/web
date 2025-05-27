@@ -158,7 +158,7 @@ export function Register() {
           <div>
             <label className="block text-sm">Outras restrições</label>
             <div className="space-y-1 text-black">
-              {["Vegana", "Vegetariano", "Intolerante à lactose", "Diabético"].map((item) => (
+              {["Vegano", "Vegetariano", "Intolerante à lactose", "Diabético"].map((item) => (
                 <div key={item}>
                   <label className="inline-flex items-center space-x-2">
                     <input
