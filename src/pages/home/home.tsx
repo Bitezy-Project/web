@@ -21,6 +21,7 @@ export function Home() {
 
         const handleSearch = async () => {
     try {
+        setLoading(true);
         const response = await fetch(`${API_BASE_URL}/receitas`, {
             method: "POST",
             headers: {
@@ -35,6 +36,7 @@ export function Home() {
             setErroBusca(true);
         }
         setLoading(true);
+        console.log(loading);
         setErroBusca(false);  // limpa erro, se tinha
         const data = await response.json();
         console.log("Resultado da busca:", data);
@@ -42,6 +44,8 @@ export function Home() {
         
         navigate('/recipes/details', { state: { recipe: data } }); // exemplo usando a primeira
         } catch (error) {
+            setErroBusca(true);
+            setLoading(false);
             console.error("Erro ao buscar receitas:", error);
         }
     };
