@@ -48,7 +48,7 @@ console.log(locais)
     <div className="flex flex-col bg-white min-h-screen">
       <PageHeader
         title="Locais Seguros"
-        description={`Resultados para` + busca}
+        description={`Resultados para ` + busca}
       />
 
       <div className="flex flex-col gap-4 p-6 fade">
